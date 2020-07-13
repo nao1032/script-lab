@@ -1,0 +1,49 @@
+#!/bin/zsh
+# 指定した文字列( txt, url, db, xml, 空ディレクトリ )をゴミ箱に移動させます。
+
+# bashで使うときは以下を変更する
+# read -p "====== Hit Enter ======"
+#
+
+SCRIPT_DIR=$(cd $(dirname $0); pwd)
+DOWNLOAD_DIR=/Users/naoto/Downloads
+echo "---match----------------------"
+#空ディレクトリを削除するため、.DS_Storeを事前に削除
+#.DS_Storeがあると-emptyでヒットしない
+find $SCRIPT_DIR -name .DS_Store -exec mv {} /Users/naoto/.Trash \;
+find $DOWNLOAD_DIR -name .DS_Store -exec mv {} /Users/naoto/.Trash \;
+find $SCRIPT_DIR \( -name \*.txt -o -name \*.url -o -name \*.db -o -name \*.xml -o -type d -empty \) -print
+find $DOWNLOAD_DIR \( -name \*.txt -o -name \*.url -o -name \*.db -o -name \*.xml -o -type d -empty \) -print
+echo "------------------------------"
+echo "Remove the all file"
+echo "'y' or 'n'"
+read answer
+case $answer in
+   y)
+      find $SCRIPT_DIR \( -name \*.txt -o -name \*.url -o -name \*.db -o -name \*.xml \) -exec mv {} /Users/naoto/.Trash \;
+      find $DOWNLOAD_DIR \( -name \*.txt -o -name \*.url -o -name \*.db -o -name \*.xml \) -exec mv {} /Users/naoto/.Trash \;
+     #空ディレクトリを削除
+      find $SCRIPT_DIR -type d -empty | xargs -I% mv % '/Users/naoto/.Trash'
+      find $DOWNLOAD_DIR  -type d -empty | xargs -I% mv % '/Users/naoto/.Trash'
+      echo "------------------------------"
+      echo "successful"
+      echo "------------------------------"
+      echo
+      echo "====== Hit Enter ======"; read -k1 -s
+      ;;
+   n)
+      echo "------------------------------"
+      echo "Not Remove"
+      echo "------------------------------"
+      echo
+      echo "====== Hit Enter ======"; read -k1 -s
+      ;;
+   *)
+      echo "------------------------------"
+      echo "Invalid string '$answer'"
+      echo "------------------------------"
+      echo
+      echo "====== Hit Enter ======"; read -k1 -s
+      ;;
+esac
+exit 0

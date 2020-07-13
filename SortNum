@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+read number
+
+dir=/Users/naoto/Desktop/hon/_sort-folder
+
+find $dir -name  '*.jpg' | sort | awk 'BEGIN{ a=1 }{ printf "mv \"%s\" /Users/naoto/Desktop/hon/_sort-folder/%03d.jpg\n", $0, a++ }' | sh
+zmv $dir/*.jpg $dir/"$number"_*.jpg
